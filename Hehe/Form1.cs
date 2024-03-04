@@ -81,7 +81,7 @@ namespace Hehe
             //test area
             if (!Multiblockloaded)
             {
-                Multiblock test = new Multiblock("O");
+                Multiblock test = new Multiblock("T");
                 CurrMultiBlock = test;
                 DrawMultiBlock(CurrMultiBlock);
                 Multiblockloaded = true;

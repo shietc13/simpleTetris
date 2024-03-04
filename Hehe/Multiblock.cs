@@ -33,27 +33,116 @@ namespace Hehe
                     GenerateO();
                     break;
                 case "L":
-
+                    GenerateL();
                     break;
                 case "I":
                     GenerateI();
                     break;
                 case "J":
-
+                    GenerateJ();
                     break;
                 case "Z":
-
+                    GenerateZ();
                     break;
                 case "S":
-
+                    GenerateS();
                     break;
-
                 case "T":
-
+                    GenerateT();
                     break;
-
 
             }
+
+        }
+
+        private void GenerateT()
+        {
+            List<Rectangle> blist = new List<Rectangle>();
+
+            Rectangle r1 = new Rectangle(Form1.leftborder + 40, 10, 30, 30);
+            Rectangle r2 = new Rectangle(r1.X + r1.Width, 10, 30, 30);
+            Rectangle r3 = new Rectangle(r1.X - r1.Width, 10, 30, 30);
+            Rectangle r4 = new Rectangle(r1.X , r1.Y + r1.Height, 30, 30);
+
+            blist.Add(r1);
+            blist.Add(r2);
+            blist.Add(r3);
+            blist.Add(r4);
+
+            this.BlockList = blist;
+            this.col = Color.Violet;
+        }
+
+        private void GenerateS()
+        {
+            List<Rectangle> blist = new List<Rectangle>();
+
+            Rectangle r1 = new Rectangle(Form1.leftborder + 40, 10, 30, 30);
+            Rectangle r2 = new Rectangle(r1.X - r1.Width, 10, 30, 30);
+            Rectangle r3 = new Rectangle(r2.X, r2.Y - r2.Height, 30, 30);
+            Rectangle r4 = new Rectangle(r3.X - r3.Width, r2.Y - r2.Height, 30, 30);
+
+            blist.Add(r1);
+            blist.Add(r2);
+            blist.Add(r3);
+            blist.Add(r4);
+
+            this.BlockList = blist;
+            this.col = Color.Green;
+        }
+
+        private void GenerateZ()
+        {
+            List<Rectangle> blist = new List<Rectangle>();
+
+            Rectangle r1 = new Rectangle(Form1.leftborder + 40, 10, 30, 30);
+            Rectangle r2 = new Rectangle(r1.X + r1.Width, 10, 30, 30);
+            Rectangle r3 = new Rectangle(r2.X, r2.Y + r2.Height, 30, 30);
+            Rectangle r4 = new Rectangle(r3.X + r3.Width, r2.Y + r2.Height, 30, 30);
+
+            blist.Add(r1);
+            blist.Add(r2);
+            blist.Add(r3);
+            blist.Add(r4);
+
+            this.BlockList = blist;
+            this.col = Color.Red;
+        }
+
+        private void GenerateJ()
+        {
+            List<Rectangle> blist = new List<Rectangle>();
+
+            Rectangle r1 = new Rectangle(Form1.leftborder + 40, 10, 30, 30);
+            Rectangle r2 = new Rectangle(Form1.leftborder + 40, 10 + r1.Height, 30, 30);
+            Rectangle r3 = new Rectangle(Form1.leftborder + 40, 10 + (r1.Height * 2), 30, 30);
+            Rectangle r4 = new Rectangle(r3.X - r3.Width, 10 + (r1.Height * 2), 30, 30);
+
+            blist.Add(r1);
+            blist.Add(r2);
+            blist.Add(r3);
+            blist.Add(r4);
+
+            this.BlockList = blist;
+            this.col = Color.Blue;
+        }
+
+        private void GenerateL()
+        {
+            List<Rectangle> blist = new List<Rectangle>();
+
+            Rectangle r1 = new Rectangle(Form1.leftborder + 40, 10, 30, 30); 
+            Rectangle r2 = new Rectangle(Form1.leftborder + 40, 10 + r1.Height, 30, 30);
+            Rectangle r3 = new Rectangle(Form1.leftborder + 40, 10 + (r1.Height * 2), 30, 30);
+            Rectangle r4 = new Rectangle(r3.X + r3.Width, 10 + (r1.Height * 2), 30, 30);
+
+            blist.Add(r1);
+            blist.Add(r2);
+            blist.Add(r3);
+            blist.Add(r4);
+
+            this.BlockList = blist;
+            this.col = Color.Orange;
 
         }
 
@@ -73,8 +162,7 @@ namespace Hehe
             blist.Add(r4);
             blist.Add(r5);
             this.BlockList = blist;
-            this.col = Color.Orange;
-
+            this.col = Color.DarkGreen;
         }
 
         private void GenerateO()
@@ -91,7 +179,7 @@ namespace Hehe
 
             //Mutliblock test = new Mutliblock(bList, "O");
             this.BlockList = bList;
-            this.col = Color.Blue;
+            this.col = Color.Yellow;
         }
 
         public void Rotate(string direction)
@@ -101,7 +189,7 @@ namespace Hehe
                 return;
             }
 
-
+            //TODO
 
         }
 
