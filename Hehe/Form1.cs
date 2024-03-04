@@ -189,13 +189,12 @@ namespace Hehe
             if (e.KeyCode == Keys.W)
             {
                 //rotate
-
             }
             if (e.KeyCode == Keys.A)
             {
                 if (CurrObject.X - 3 > leftborder)
                 {
-                    CurrObject.X -= 3;
+                    CurrObject.X -= 3; //TODO 
                 }
             }
             if (e.KeyCode == Keys.S)
