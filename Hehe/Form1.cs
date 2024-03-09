@@ -27,9 +27,7 @@ namespace Hehe
         internal int rightborder = 0;
         internal int lowerborder = 0;
 
-        private Rectangle NextObject;
-        private Rectangle CurrObject;
-        private bool CurrObjFilled = false;
+        private Multiblock NextObject;                
         private List<Rectangle> StaticObjectList = new List<Rectangle>();
 
         private bool Multiblockloaded = false;
@@ -48,15 +46,12 @@ namespace Hehe
 
             Random r = new Random();
             int tmp = r.Next(leftborder, rightborder);
-
-            CurrObject = new Rectangle(tmp, 10, 30, 30);
-            g = this.CreateGraphics();
-            CurrObjFilled = false;
+            
+            g = this.CreateGraphics();            
 
             t.Interval = 10;
             t.Tick += new EventHandler(t_Tick);
             t.Start();
-
         }
 
         private void t_Tick(object sender, EventArgs e)
@@ -66,33 +61,16 @@ namespace Hehe
 
             DrawGameField();
 
-            CheckCurrObjAndLoadNextOne();
+            LoadBlockOrMoveCurrentOne();
 
             DrawStaticObjects();
-
-            MoveObjects();
 
             CheckIfLineIsFull(); //adds score
 
             UpdateDifficulty();
 
-            CheckIfUpperLimitReached(); // game over 
-
-            //test area
-            if (!Multiblockloaded)
-            {
-                Multiblock test = new Multiblock("T");
-                CurrMultiBlock = test;
-                DrawMultiBlock(CurrMultiBlock);
-                Multiblockloaded = true;
-            }else
-            {
-                MoveMultiBlock(CurrMultiBlock);
-            }
-                        
-            //test.Rotate("left");
-            
-            //end
+            CheckIfUpperLimitReached(); // game over
+                                        
         }
 
         private void MoveMultiBlock(Multiblock multiblock_p)
@@ -100,22 +78,16 @@ namespace Hehe
             for(int i = multiblock_p.BlockList.Count() -1; i >= 0; i--)
             {
                 Rectangle tmpVar = multiblock_p.BlockList[i];
-                multiblock_p.BlockList.RemoveAt(i);
                 tmpVar.Y += speed;
-                g.DrawRectangle(new Pen(multiblock_p.col), tmpVar.X, tmpVar.Y, tmpVar.Width, tmpVar.Height); //doesnt move it yet -> TODO 
+                if (multiblock_p.RotatingPoint == multiblock_p.BlockList[i])
+                {
+                    multiblock_p.RotatingPoint = tmpVar;
+                }
+                multiblock_p.BlockList.RemoveAt(i);
+                g.DrawRectangle(new Pen(multiblock_p.Col), tmpVar.X, tmpVar.Y, tmpVar.Width, tmpVar.Height); //doesnt move it yet -> TODO 
                 multiblock_p.BlockList.Add(tmpVar);
             }
         }
-
-        private void DrawMultiBlock(Multiblock nBlock)
-        {
-            foreach (Rectangle rEntry in nBlock.BlockList)
-            {
-                //g.DrawRectangle(new Pen(Color.Orange), rEntry);
-            }
-        }
-
-
 
         private void DrawGameField()
         {
@@ -132,81 +104,70 @@ namespace Hehe
             }
         }
 
-        private void CheckCurrObjAndLoadNextOne()
+        private void LoadBlockOrMoveCurrentOne()
         {
-            if (CurrObjFilled == false)
+            if (Multiblockloaded == false)
             {
                 Random r = new Random();
-                int tmp = r.Next(leftborder, rightborder);
+                int tmp = r.Next(leftborder, rightborder-150);
 
-                CurrObject = new Rectangle(tmp, 10, 30,30);
-                g.DrawRectangle(new Pen(Color.White), CurrObject);
-                CurrObjFilled = true;
+                Random form = new Random();
+                List<string> forms = new List<string>
+                {
+                    "O", "L", "I", "J", "Z", "S", "T"
+                }; 
+
+                int pos = form.Next(forms.Count());
+
+                Multiblock newBlock = new Multiblock("I", tmp, 1); //forms[pos]
+                CurrMultiBlock = newBlock;
+                Multiblockloaded = true;
+
             }
             else
             {
-                g.DrawRectangle(new Pen(Color.White), CurrObject);
+                MoveMultiBlock(CurrMultiBlock);
             }
-        }
-
-        private void MoveObjects()
-        {            
-            if (CurrObjFilled)
-            {
-                if (CurrObject.Y + speed < lowerborder) //TODO limiter is wrong 
-                {
-                    CurrObject.Y += speed; //speed
-                }
-                else
-                {
-                    StaticObjectList.Add(CurrObject);
-                    CurrObject = new Rectangle(0,0,0,0);
-                    CurrObjFilled = false;
-                }        
-                g.DrawRectangle(new Pen(Color.White), CurrObject);
-            }
-        }
-
+        }      
 
         private void CheckIfUpperLimitReached()
         {
-            //throw new NotImplementedException();
             //TODO game over check
         }
 
         private void CheckIfLineIsFull()
         {
             //throw new NotImplementedException();
-            this.Text = "Tetris - Score: " + Score + " , C.Y: " + CurrObject.Y;
+            this.Text = "Tetris - Score: " + Score + " , C.X: " + CurrMultiBlock.GetLeftestX();
             //TODO remove line and add Score
             //TODO remove other static objects all 1 line down
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (CurrObjFilled == false) return;
+            if (Multiblockloaded == false) return;
             
             if (e.KeyCode == Keys.W)
             {
-                //rotate
+                CurrMultiBlock.Rotate();
             }
             if (e.KeyCode == Keys.A)
             {
-                if (CurrObject.X - 3 > leftborder)
+                if (CurrMultiBlock.GetLeftestX() - 3 > leftborder)
                 {
-                    CurrObject.X -= 3; //TODO 
+                    CurrMultiBlock.MoveLeft(3);
                 }
             }
             if (e.KeyCode == Keys.S)
             {
                 //go down and check for collission
-
+                
             }
             if (e.KeyCode == Keys.D)
             {
-                if (CurrObject.X + 3 < rightborder - CurrObject.Width)
+                if (CurrMultiBlock.GetLeftestX() + 3 < rightborder - CurrMultiBlock.GetWidth())
                 {
-                    CurrObject.X += 3;
+                    CurrMultiBlock.MoveRight(3);
                 }
             }
             if (e.KeyCode == Keys.Escape)
