@@ -266,12 +266,46 @@ namespace Hehe
             {
                 case "O":
                     //don't rotate the O
+                    newList.Clear();
                     break;
                 case "L":
-
                     newList.Clear();
+                    currX = 9999;
+                    currY = 0;
 
-                    //TODO 
+                    if (PosIsVertical()) //TODO fix this 
+                    {
+                        //is vertical 
+                        currX = this.RotatingPoint.X;
+                        currY = this.RotatingPoint.Y; // y becomes static position
+
+                        newList.Add(this.RotatingPoint);
+
+                        Rectangle r1 = new Rectangle(currX - CWidth, currY, CWidth, CHeight);
+                        Rectangle r2 = new Rectangle(currX + CWidth, currY, CWidth, CHeight);
+                        Rectangle r3 = new Rectangle(r2.X, currY + CHeight, CWidth, CHeight);
+
+                        newList.Add(r1);
+                        newList.Add(r2);
+                        newList.Add(r3);
+                    }
+                    else
+                    {
+                        //is horizontal
+                        currX = this.RotatingPoint.X; //x becomes static position
+                        currY = this.RotatingPoint.Y;
+                        newList.Add(this.RotatingPoint);
+
+                        Rectangle r1 = new Rectangle(currX, currY - CHeight, CWidth, CHeight);
+                        Rectangle r2 = new Rectangle(currX, currY + CHeight, CWidth, CHeight);
+                        Rectangle r3 = new Rectangle(currX, r2.Y + CHeight, CWidth, CHeight);
+
+                        newList.Add(r1);
+                        newList.Add(r2);
+                        newList.Add(r3);
+                    }
+                    BlockList.Clear();
+                    
                     BlockList = newList;
                     break;
                 case "I":
@@ -279,7 +313,7 @@ namespace Hehe
                     currX = 9999;
                     currY = 0;                    
                     
-                    if (IposIsVertical())
+                    if (PosIsVertical())
                     {
                         //I is vertical 
                         currX = this.RotatingPoint.X;
@@ -400,7 +434,7 @@ namespace Hehe
             return newRecs;
         }
 
-        private bool IposIsVertical()
+        private bool PosIsVertical()
         {
             int posX = 9999;
             foreach (Rectangle r in this.BlockList)
