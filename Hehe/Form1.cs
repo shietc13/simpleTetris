@@ -75,6 +75,8 @@ namespace Hehe
 
         private void MoveMultiBlock(Multiblock multiblock_p)
         {
+            //TODO add check for lower limit of playfield and if hit -> freeze multiblock, add to StaticObjectList and set multiblockLoaded = false
+
             for(int i = multiblock_p.BlockList.Count() -1; i >= 0; i--)
             {
                 Rectangle tmpVar = multiblock_p.BlockList[i];
@@ -84,7 +86,7 @@ namespace Hehe
                     multiblock_p.RotatingPoint = tmpVar;
                 }
                 multiblock_p.BlockList.RemoveAt(i);
-                g.DrawRectangle(new Pen(multiblock_p.Col), tmpVar.X, tmpVar.Y, tmpVar.Width, tmpVar.Height); //doesnt move it yet -> TODO 
+                g.DrawRectangle(new Pen(multiblock_p.Col), tmpVar.X, tmpVar.Y, tmpVar.Width, tmpVar.Height);
                 multiblock_p.BlockList.Add(tmpVar);
             }
         }
@@ -119,10 +121,9 @@ namespace Hehe
 
                 int pos = form.Next(forms.Count());
 
-                Multiblock newBlock = new Multiblock("I", tmp, 1); //forms[pos]
+                Multiblock newBlock = new Multiblock("T", tmp, 1); //forms[pos]
                 CurrMultiBlock = newBlock;
                 Multiblockloaded = true;
-
             }
             else
             {

@@ -86,7 +86,7 @@ namespace Hehe
 
             Random rnd = new Random();
             int pos = rnd.Next(1);
-            if (pos == 0) { Rotate(); };            
+            //if (pos == 0) { Rotate(); };
         } 
 
         private void GenerateS()
@@ -397,93 +397,64 @@ namespace Hehe
                     break;
                 case "T":
                     newList.Clear();
-                    List<Rectangle> blocksAround = new List<Rectangle>();
-                    Rectangle addThis = new Rectangle();
-                    List<Rectangle> addList = new List<Rectangle>();
+                    List<Rectangle> currList = new List<Rectangle>();
 
                     foreach (Rectangle r in this.BlockList)
                     {
-                        //add all recs to list which aren't fixed point/rotating point
-                        if(r != RotatingPoint)
+                        if (r != RotatingPoint)
                         {
-                            newList.Add(r);
+                            currList.Add(r);
                         }
-                        else
-                        {
-                            //generate recs around rotating point
-                            Rectangle rA1 = r;
-                            Rectangle rA2 = new Rectangle(rA1.X + CWidth, rA1.Y, CWidth, CHeight);
-                            Rectangle rA3 = new Rectangle(rA1.X - CWidth, rA1.Y, CWidth, CHeight);
-                            Rectangle rA4 = new Rectangle(rA1.X, rA1.Y + CHeight, CWidth, CHeight);
-                            Rectangle rA5 = new Rectangle(rA1.X, rA1.Y - CHeight, CWidth, CHeight);
-
-                            //blocksAround.Add(rA1); dont add rotating point
-                            blocksAround.Add(rA2);
-                            blocksAround.Add(rA3);
-                            blocksAround.Add(rA4);
-                            blocksAround.Add(rA5);
-                        }                       
                     }
-                    //compare blocksAround with newList, if rect not covering rect2 then insert to newList and delete one from newList
-                    foreach (Rectangle rs in newList)
+                    List<Rectangle> roundList = GenerateBlocksAroundPoint(RotatingPoint);
+                    Rectangle lastRec = new Rectangle();
+                    foreach (Rectangle r2 in roundList)
                     {
-                        for(int i = 0; i < blocksAround.Count; i++)
+                        for(int i = currList.Count - 1; i >= 0; i--)
                         {
-                            if (blocksAround[i] == rs)
+                            if(currList[i] == r2)
                             {
-                                if(i+1 == blocksAround.Count)
+                                if (!newList.Contains(r2))
                                 {
-                                    //do nothing
-                                }
-                                else
-                                {
-                                    addList.Add(rs);
-                                }
+                                    newList.Add(r2);
+                                    lastRec = r2;
+                                }                                                                
                             }
                             else
                             {
-                                addList.Add(blocksAround[i]);
+                                if (!newList.Contains(r2))
+                                {
+                                    newList.Add(r2);
+                                }
                             }
                         }
                     }
+                    if (!newList.Remove(lastRec))
+                    {
+                        throw new Exception("wat");
+                    }
+                    newList.Add(RotatingPoint);
 
-                    BlockList = addList;
+                    BlockList = newList;
                     break;
             }
+        }
 
-        //https://gamedev.stackexchange.com/questions/17974/how-to-rotate-blocks-in-tetris
-            //General formula for rotating around origin is
+        private List<Rectangle> GenerateBlocksAroundPoint(Rectangle rotatingPoint)
+        {
+            List<Rectangle> newRecs = new List<Rectangle>();
 
-            //xNew = x * cos(a) - y * sin(a)
-            //yNew = x * sin(a) + y * cos(a)
+            Rectangle r1 = new Rectangle(rotatingPoint.X - CWidth, rotatingPoint.Y, CWidth, CHeight); //left of r
+            Rectangle r2 = new Rectangle(rotatingPoint.X, rotatingPoint.Y + CHeight, CWidth, CHeight); //above of r
+            Rectangle r3 = new Rectangle(rotatingPoint.X + CWidth, rotatingPoint.Y, CWidth, CHeight); //right of r
+            Rectangle r4 = new Rectangle(rotatingPoint.X, rotatingPoint.Y - CHeight, CWidth, CHeight); //below of r
 
+            newRecs.Add(r1);
+            newRecs.Add(r2);
+            newRecs.Add(r3);
+            newRecs.Add(r4);
 
-            //For 90 degrees it becomes
-
-
-            //xNew = -y
-            //yNew = x
-
-
-            //So, firstly get brick center coordinates relatively to pivot point:
-
-
-            //x = xBrickCenter - xPivot
-            //y = yBrickCenter - yPivot
-
-
-            //Then rotate them around pivot point:
-
-
-            //x1 = -y = yPivot - yBrickCenter
-            //y1 = x = xBrickCenter - xPivot
-
-            //And then add pivot coordinates to rotated point:
-
-
-            //newXBrickCenter = xPivot + x1 = xPivot + yPivot - yBrickCenter
-            //newYBrickCenter = yPivot + y1 = yPivot - xPivot + xBrickCenter
-
+            return newRecs;
         }
 
         private bool IposIsVertical()
