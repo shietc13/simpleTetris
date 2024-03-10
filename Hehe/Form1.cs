@@ -23,9 +23,9 @@ namespace Hehe
         private int Level = 0;
         private int speed = 1;
 
-        internal static int leftborder { get; set; }
-        internal int rightborder = 0;
-        internal int lowerborder = 0;
+        internal static int LeftBorder;
+        internal int RightBorder = 0;
+        internal int LowerBorder = 0;
 
         private Multiblock NextObject;                
         private List<Rectangle> StaticObjectList = new List<Rectangle>();
@@ -39,13 +39,9 @@ namespace Hehe
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Text = "Tetris";
-            rightborder = (this.Size.Width / 3) * 2;
-            lowerborder = (this.Size.Height - 30);
-
-            leftborder = 10;
-
-            Random r = new Random();
-            int tmp = r.Next(leftborder, rightborder);
+            RightBorder = (this.Size.Width / 3) * 2;
+            LowerBorder = (this.Size.Height - 50);
+            LeftBorder = 10;
             
             g = this.CreateGraphics();            
 
@@ -93,9 +89,9 @@ namespace Hehe
 
         private void DrawGameField()
         {
-            g.DrawLine(new Pen(Color.White), leftborder, 5, leftborder, lowerborder);
-            g.DrawLine(new Pen(Color.White), rightborder, 5, rightborder, lowerborder);
-            g.DrawLine(new Pen(Color.White), rightborder, lowerborder, rightborder, lowerborder);
+            g.DrawLine(new Pen(Color.White), LeftBorder, 5, LeftBorder, LowerBorder); //left border line
+            g.DrawLine(new Pen(Color.White), RightBorder, 5, RightBorder, LowerBorder); //rigth border line
+            g.DrawLine(new Pen(Color.White), LeftBorder, LowerBorder, RightBorder, LowerBorder); //lower border line 
         }
 
         private void DrawStaticObjects()
@@ -111,7 +107,7 @@ namespace Hehe
             if (Multiblockloaded == false)
             {
                 Random r = new Random();
-                int tmp = r.Next(leftborder, rightborder-150);
+                int tmp = r.Next(LeftBorder, RightBorder-150);
 
                 Random form = new Random();
                 List<string> forms = new List<string>
@@ -121,7 +117,7 @@ namespace Hehe
 
                 int pos = form.Next(forms.Count());
 
-                Multiblock newBlock = new Multiblock("T", tmp, 1); //forms[pos]
+                Multiblock newBlock = new Multiblock("L", tmp, 1); //forms[pos]
                 CurrMultiBlock = newBlock;
                 Multiblockloaded = true;
             }
@@ -139,7 +135,7 @@ namespace Hehe
         private void CheckIfLineIsFull()
         {
             //throw new NotImplementedException();
-            this.Text = "Tetris - Score: " + Score + " , C.X: " + CurrMultiBlock.GetLeftestX();
+            this.Text = "Tetris - Score: " + Score + " , C.X: " + CurrMultiBlock.GetLeftestX() + " H: " + this.Size.Height;
             //TODO remove line and add Score
             //TODO remove other static objects all 1 line down
         }
@@ -154,19 +150,19 @@ namespace Hehe
             }
             if (e.KeyCode == Keys.A)
             {
-                if (CurrMultiBlock.GetLeftestX() - 3 > leftborder)
+                if (CurrMultiBlock.GetLeftestX() - 3 > LeftBorder)
                 {
                     CurrMultiBlock.MoveLeft(3);
                 }
             }
             if (e.KeyCode == Keys.S)
             {
-                //go down and check for collission
+                //todo go down and check for collission -> movemultiblock(currmultiblock);
                 
             }
             if (e.KeyCode == Keys.D)
             {
-                if (CurrMultiBlock.GetLeftestX() + 3 < rightborder - CurrMultiBlock.GetWidth())
+                if (CurrMultiBlock.GetLeftestX() + 3 < RightBorder - CurrMultiBlock.GetWidth())
                 {
                     CurrMultiBlock.MoveRight(3);
                 }
@@ -194,6 +190,24 @@ namespace Hehe
                 Level += 1;
                 speed += 1;
             }
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            RightBorder = (Size.Width / 3) * 2;
+            LowerBorder = Size.Height - 50;
+        }
+
+        private void Form1_ResizeEnd(object sender, EventArgs e)
+        {
+            RightBorder = (Size.Width / 3) * 2;
+            LowerBorder = Size.Height - 50;
+        }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            RightBorder = (Size.Width / 3) * 2;
+            LowerBorder = Size.Height - 50;
         }
     }
 }
