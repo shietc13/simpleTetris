@@ -135,7 +135,7 @@ namespace Hehe
         private void CheckIfLineIsFull()
         {
             //throw new NotImplementedException();
-            this.Text = "Tetris - Score: " + Score + " , C.X: " + CurrMultiBlock.GetLeftestX() + " H: " + this.Size.Height;
+            Text = "Tetris - Score: " + Score + " , C.X: " + CurrMultiBlock.GetLeftestX() + " H: " + this.Size.Height;
             //TODO remove line and add Score
             //TODO remove other static objects all 1 line down
         }

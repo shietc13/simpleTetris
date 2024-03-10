@@ -271,22 +271,7 @@ namespace Hehe
 
                     newList.Clear();
 
-                    foreach(Rectangle r in this.BlockList)
-                    {
-                        //int[][] PosList = new int[4][];
-                        currX = 0;
-                        currY = 0;
-
-                        Rectangle r2 = r;
-                        currX = r2.X;
-                        currY = r2.Y;
-                        r2.Y = currX;
-                        r2.X = currY;
-                        newList.Add(r2);
-
-                        //PosList[i][j] = r.X;
-                        //PosList[1][0] = r.Y;
-                    }
+                    //TODO 
                     BlockList = newList;
                     break;
                 case "I":
@@ -335,64 +320,22 @@ namespace Hehe
                 case "J":
                     newList.Clear();
 
-                    foreach (Rectangle r in this.BlockList)
-                    {
-                        //int[][] PosList = new int[4][];
-                        currX = 0;
-                        currY = 0;
+                    //TODO 
 
-                        Rectangle r2 = r;
-                        currX = r2.X;
-                        currY = r2.Y;
-                        r2.Y = currX;
-                        r2.X = currY;
-                        newList.Add(r2);
-
-                        //PosList[i][j] = r.X;
-                        //PosList[1][0] = r.Y;
-                    }
                     BlockList = newList;
                     break;
                 case "Z":
                     newList.Clear();
 
-                    foreach (Rectangle r in this.BlockList)
-                    {
-                        //int[][] PosList = new int[4][];
-                        currX = 0;
-                        currY = 0;
+                    //TODO 
 
-                        Rectangle r2 = r;
-                        currX = r2.X;
-                        currY = r2.Y;
-                        r2.Y = currX;
-                        r2.X = currY;
-                        newList.Add(r2);
-
-                        //PosList[i][j] = r.X;
-                        //PosList[1][0] = r.Y;
-                    }
                     BlockList = newList;
                     break;
                 case "S":
                     newList.Clear();
 
-                    foreach (Rectangle r in this.BlockList)
-                    {
-                        //int[][] PosList = new int[4][];
-                        currX = 0;
-                        currY = 0;
+                    //TODO 
 
-                        Rectangle r2 = r;
-                        currX = r2.X;
-                        currY = r2.Y;
-                        r2.Y = currX;
-                        r2.X = currY;
-                        newList.Add(r2);
-
-                        //PosList[i][j] = r.X;
-                        //PosList[1][0] = r.Y;
-                    }
                     BlockList = newList;
                     break;
                 case "T":
@@ -497,6 +440,25 @@ namespace Hehe
                 }
             }
             return leftbound;
+        }
+
+        internal int GetHeight()
+        {
+            int low = 9999;
+            int high = 0;
+
+            foreach(Rectangle r in this.BlockList)
+            {
+                if (r.Y > high)
+                {
+                    high = r.Y;
+                }
+                if (r.Y < low)
+                {
+                    low = r.Y;
+                }
+            }
+            return (high - low) + CHeight;
         }
 
         internal void MoveLeft(int change)
